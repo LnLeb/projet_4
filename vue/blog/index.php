@@ -4,7 +4,7 @@
     <head>
         <meta charset='utf-8'>
         <title>Mon blog</title>
-        <link rel="stylesheet" href="css.css">
+        <link rel="stylesheet" href="../../vue/blog/css.css">
     </head>
     <body>
         <h1>Mon super blog !</h1>
@@ -17,7 +17,7 @@
         
         ?>
         
-        <article id="news">
+        <article class="news">
             <h3>
                 <?php echo $billet['titre']; ?>
                 <em>Le <?php echo $billet['date_crea']; ?> à <?php echo $billet['heure_crea']; ?></em>            
