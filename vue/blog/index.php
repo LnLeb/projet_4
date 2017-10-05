@@ -6,8 +6,18 @@
         <title>Mon blog</title>
         <link rel="stylesheet" href="../../vue/blog/css.css">
     </head>
+    
     <body>
         <h1>Mon super blog !</h1>
+        <!-- zone de connexion -->
+        <p>Connexion : </p>
+        <form method="post" action="../../vue/blog/gestion.php">
+            <label for="identifiant">Identifiant : </label>
+            <input type="text" name="identifiant" id="identifiant"> <br>
+            <label for="motdepasse">Mot de passe : </label>
+            <input type="password" name="motdepasse" id="motdepasse"> <br>
+            <input type="submit" value="Valider">
+        </form>
         <p>Derniers billets du blog :</p>
         
         <?php
