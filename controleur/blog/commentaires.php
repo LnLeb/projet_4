@@ -1,32 +1,38 @@
 <?php
-include_once('../../modele/blog/get_billets.php');
+// on récupère les données des billets dans le modèle
+include_once('../../modele/blog/get_billet.php');
+
+// s'il existe un billet correspondant à l'id passé par l'url on récupère uniquement le bon billet pour l'afficher avec les commentaires
 if (isset($_GET['billet']))
 {
     $billet = get_billet_by_id($_GET['billet']);
 }
 
-if(empty($billet))
+// si l'id passé par l'URL ne correspond à aucun billet
+if (empty($billet))
 {
     $billet_vide = true;
 }
 
-// on demande les 5 derniers commentaires qui correspondent au bon billet (modele)
-include_once('../../modele/blog/get_commentaires.php');
-
-// on effectue du traitement sur les données (contrôleur)
-// Ici on doit surtout sécurise l'affichage
+// on demande les 10 derniers commentaires qui correspondent au bon billet au modèle
+include_once('../../modele/blog/get_commentaire.php');
 $commentaires = get_commentaires(0, 10);
-if (!empty($commentaires)) 
+
+// s'il existe bien des commentaires
+if (!empty($commentaires))
 {
-foreach($commentaires as $cle=>$commentaire)
-{
-    $commentairess[$cle]['auteur'] = htmlspecialchars($commentaire['auteur']);
-    $commentaires[$cle]['commentaire'] = nl2br(htmlspecialchars($commentaire['commentaire']));
+    // on sécurise l'affichage
+    foreach($commentaires as $cle=>$commentaire)
+    {
+        $commentaires[$cle]['auteur'] = htmlspecialchars($commentaire['auteur']);
+        $commentaire[$cle]['commentaire'] = nl2br(htmlspecialchars($commentaire['commentaire']));
+    }
 }
-}
-else
+// sinon
+else 
 {
     $commentaire_vide = true;
 }
-// on affiche la page (vue)
-include_once('../../vue/blog/commentaires.php');
+
+// on affiche la page qui est dans la vue
+include_once('../../vue/blog/commentaire.php');
