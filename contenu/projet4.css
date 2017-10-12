@@ -1,0 +1,94 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+
+a {
+    text-decoration: none;
+    color: black;
+}
+
+h1, h2, h3 {
+    text-align: center;
+}
+
+p {
+    text-align: justify;
+}
+
+header h1
+{
+    width: 40%;
+    text-align: center;
+    padding: 5px;
+    margin: auto;
+    margin-top: 15px;
+}
+header p {
+    font-style: italic;
+    margin-left: 80px;
+    width: 20%;
+    padding: 5px;
+    margin-bottom: 0;
+}
+section {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+}
+
+#admin {
+    display: block;
+    margin: 25px;
+}
+
+article {
+    width: 80%;
+    margin: 25px;
+    padding: 15px;
+}
+article h2 {
+    text-align: center;
+    width: 25%;
+    margin: auto;
+    padding: 5px;
+}
+
+aside {
+    width: 20%;
+    padding: 15px;
+    text-align: center;
+    margin: 25px;
+}
+
+aside form input {
+    margin: 5px;
+}
+
+aside img {
+    padding-top: 25px;
+    width: 50%;
+}
+
+#erreur {
+    text-align: center;
+    color : red;
+}
+
+#admin form {
+    margin: auto;
+}
+#admin #titre {
+    width: 50%;
+}
+
+#admin form input {
+    margin: 5px;
+}
+
+footer p {
+    width: 100%;
+    height: 70px;
+    text-align: center;
+    margin-bottom: 0;
+}
