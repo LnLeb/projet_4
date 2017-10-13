@@ -4,15 +4,26 @@ include_once('modele/modele.php');
 
 // Affiche la liste de tous les billets du blog
 function accueil() {
-    $billets = get_billets(0, 5);
+    // Elément page pour la pagination des billets
+    if (isset($_GET['page'])) {
+        $page = $_GET['page'];
+    }
+    else {
+        $page = 1;
+    }
+    
+    $billets = get_billets(5*($page - 1), 5);
 
     // on sécurise l'affichage
     foreach($billets as $cle=>$billet)
     {
         $billets[$cle]['titre'] = htmlspecialchars($billet['titre']);
         $billets[$cle]['contenu'] = nl2br(htmlspecialchars($billet['contenu']));
-    
     }
+    
+    $nb_articles = pagination_billets(); // Connaitre le nombre de resultats
+    $nb_pages=ceil($nb_articles/5); // Divisé par le nombre de pages
+    
     require('vue/accueil.php');
 }
 
@@ -29,9 +40,9 @@ function billet($idBillet) {
     {
         $billet_vide = true;
     }
-
-    // on demande les 10 derniers commentaires qui correspondent au bon billet au modèle
-    $commentaires = get_commentaires(0, 10);
+    
+    // on demande les commentaires qui correspondent au bon billet au modèle
+    $commentaires = get_commentaires(0, 200);
 
     // s'il existe bien des commentaires
     if (!empty($commentaires))
@@ -78,3 +89,4 @@ function deconnexion() {
 function erreur($msgErreur) {
   require('vue/erreur.php');
 }
+
