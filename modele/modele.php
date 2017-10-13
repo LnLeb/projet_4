@@ -34,7 +34,7 @@ if(isset($_POST['extrait']))
 
 // on crée une fonction qui récupère tous les billets de la base de données
 function get_billets($offset, $limit)
-{
+{   
     global $db;
     $offset = (int)$offset;
     $limit = (int)$limit;
@@ -44,10 +44,21 @@ function get_billets($offset, $limit)
     $req->bindParam(':limit', $limit, PDO::PARAM_INT);
     $req->execute();
     $billets = $req->fetchAll();
-    
+
     return $billets;
 }
 
+function pagination_billets()
+{
+    global $db;
+    
+    $req = $db->query('SELECT COUNT(*) AS nb_billets FROM billets');
+    $donnees = $req->fetch();
+    
+    $nb_billets = $donnees['nb_billets'];
+    return $nb_billets;
+}
+    
 // on crée une fonction pour ne récupérer qu'un billet en fonction de son id
 function get_billet_by_id($id_billet)
 {
