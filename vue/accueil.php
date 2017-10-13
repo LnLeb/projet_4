@@ -20,6 +20,14 @@
     </p>
     <?php
     }
+    include_once('modele/modele.php');
+    echo 'Page : ';
+    for($i=1; $i<$nb_pages+1; $i++)
+    {
+        ?>
+        <a href="index.php?page=<?php echo $i ?>"> <?php echo $i ?> | </a>
+    <?php
+    }
     ?>
 <?php $article = ob_get_clean(); ?>
 
