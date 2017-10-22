@@ -1,6 +1,11 @@
 <?php
 
-include_once('modele/modele.php');
+function chargerClasse($classe)
+{
+  require 'modele/'. $classe . '.php';
+}
+
+spl_autoload_register('chargerClasse');
 
 // Affiche la liste de tous les billets du blog
 function accueil() {
@@ -12,7 +17,8 @@ function accueil() {
         $page = 1;
     }
     
-    $billets = get_billets(5*($page - 1), 5);
+    $billets = new BilletManager;
+    $billets->get_billets(5*($page - 1), 5);
 
     // on sécurise l'affichage
     foreach($billets as $cle=>$billet)
@@ -21,7 +27,8 @@ function accueil() {
         $billets[$cle]['contenu'] = nl2br(htmlspecialchars($billet['contenu']));
     }
     
-    $nb_articles = pagination_billets(); // Connaitre le nombre de resultats
+    $nb_articles = new BilletManager;
+    $nb_articles->pagination_billets(); // Connaitre le nombre de resultats
     $nb_pages=ceil($nb_articles/5); // Divisé par le nombre de pages
     
     require('vue/accueil.php');
@@ -32,7 +39,8 @@ function billet($idBillet) {
     // s'il existe un billet correspondant à l'id passé par l'url on récupère uniquement le bon billet pour l'afficher avec les commentaires
     if (isset($_GET['id']))
     {
-        $billet = get_billet_by_id($_GET['id']);
+        $billet = new BilletManager;
+        $billet->getBilletById($_GET['id']);
     }
 
     // si l'id passé par l'URL ne correspond à aucun billet
@@ -42,7 +50,8 @@ function billet($idBillet) {
     }
     
     // on demande les commentaires qui correspondent au bon billet au modèle
-    $commentaires = get_commentaires(0, 200);
+    $commentaires = new CommentaireManager;
+    $commentaires->get_commentaires(0, 200);
 
     // s'il existe bien des commentaires
     if (!empty($commentaires))
@@ -89,4 +98,3 @@ function deconnexion() {
 function erreur($msgErreur) {
   require('vue/erreur.php');
 }
-
