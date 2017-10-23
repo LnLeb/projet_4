@@ -1,4 +1,6 @@
 <?php
+
+// définition de la classe Commentaire pour générer des objets commentaire
 class Commentaire
 {
     protected $id,
