@@ -6,12 +6,13 @@ require_once ('vue/Vue.php');
 
 class ControleurAdmin
 {
-    
         private $billet;
+        private $commentaire;
     
     public function __construct()
     {
-        $this->billet = new BilletManager();
+        $this->billet = new BilletManager;
+        $this->commentaire = new CommentaireManager;
     }
     
     public function admin()
