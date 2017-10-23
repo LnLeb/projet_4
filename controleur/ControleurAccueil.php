@@ -11,11 +11,11 @@ class ControleurAccueil
     
     public function __construct()
     {
-        $this->billet = new BilletManager();
-        $this->commentaire = new CommentaireManager();
+        $this->billet = new BilletManager;
+        $this->commentaire = new CommentaireManager;
     }
 
-    // Affichage des billets
+    // 
     public function accueil()
     {  
         $allBillets = $this->billet->get_billets(0, 500);
