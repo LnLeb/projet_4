@@ -1,4 +1,5 @@
 <?php
+    // Création de la classe Modele pour générer la connexion à la BDD utilisée ensuite pour les requêtes
     abstract class Modele 
     {
         // attribut : objet PDO d'accès à la BDD
