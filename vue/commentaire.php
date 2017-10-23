@@ -7,9 +7,8 @@ else
 {
 ?>
 
-<?php $title = $billet['titre']; ?>
+<?php $this->titre = $billet['titre']; ?>
 
-<?php ob_start(); ?>
     <h2><?php echo $billet['titre']; ?></h2>
     <p>
         <em>Posté le <?php echo $billet['date_crea']; ?> à <?php echo $billet['heure_crea']; ?></em>
@@ -50,12 +49,6 @@ else
         </p>
         </form>                
     </article>
-<?php $article = ob_get_clean(); ?>
-
-<?php $aside = '' ?>
-
-<?php require 'gabarit.php'; ?>
 
 <?php
 }
-?>
