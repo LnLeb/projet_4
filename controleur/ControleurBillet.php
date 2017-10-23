@@ -1,9 +1,8 @@
 <?php
 
-require_once('modele/Billet.php');
 require_once('modele/BilletManager.php');
-require_once('modele/Commentaire.php');
 require_once('modele/CommentaireManager.php');
+require_once('vue/Vue.php');
 
 class ControleurBillet 
 {
@@ -48,6 +47,8 @@ class ControleurBillet
         {
             $commentaire_vide = true;
         }
-        require('vue/commentaire.php');
+        
+        $vue = new Vue('commentaire');
+        $vue->generer(array('billet' => $billet, 'commentaire' => $commentaire));
     }
 }   
