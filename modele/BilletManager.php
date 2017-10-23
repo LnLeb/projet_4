@@ -1,7 +1,11 @@
 <?php
 
+// On appelle la classe qui fait la connexion à la BDD et les classes Billet et Commentaire pour récupérer les informations
 require_once 'modele/Modele.php';
+require_once 'modele/Billet.php';
+require_once 'modele/Commentaire.php';
 
+// Création de la classe BilletManager qui effectuera les requêtes en lien avec les billets
 class BilletManager extends Modele
 {
     // méthode pour récupérer tous les billets
@@ -66,8 +70,8 @@ class BilletManager extends Modele
         $this->executerRequete($sql);
     }
     
-    // méthode pour la pagination des billets sur la page d'accueil
-    public function pagination_billets()
+    // méthode pour renvoyer le nombre total de billets
+    public function count_billets()
     {
         $sql = 'SELECT COUNT(*) AS nb_billets FROM billets';
         
