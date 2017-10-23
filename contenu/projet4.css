@@ -3,87 +3,58 @@ body {
     padding: 0;
 }
 
+#contenu {
+    width: 100%;
+    height: 100%;
+}
+
 a {
     text-decoration: none;
     color: black;
 }
 
-h1, h2, h3 {
+li {
+    list-style: none;
+}
+
+header {
+    width: 100%;
+    height: 100px;
+    background-color: black;
+    color: white;
     text-align: center;
 }
 
-p {
-    text-align: justify;
+h1 {
+    margin-top: 0;
 }
 
-header h1
-{
-    width: 40%;
-    text-align: center;
-    padding: 5px;
-    margin: auto;
-    margin-top: 15px;
-}
 header p {
     font-style: italic;
-    margin-left: 80px;
-    width: 20%;
-    padding: 5px;
-    margin-bottom: 0;
+    color: grey;
 }
-section {
+
+header nav {
+    width: 100%;
+    height: 40px;
+    background-color: grey;
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
+    -ms-flex-pack: distribute;
+    justify-content: space-around;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: row;
+    flex-direction: row;
 }
 
-#admin {
-    display: block;
-    margin: 25px;
+header #chapitres, header #connexion {
+    visibility: hidden;
 }
 
-article {
-    width: 80%;
-    margin: 25px;
-    padding: 15px;
-}
-article h2 {
-    text-align: center;
-    width: 25%;
-    margin: auto;
-    padding: 5px;
-}
-
-aside {
-    width: 20%;
-    padding: 15px;
-    text-align: center;
-    margin: 25px;
-}
-
-aside form input {
-    margin: 5px;
-}
-
-aside img {
-    padding-top: 25px;
-    width: 50%;
-}
-
-#erreur {
-    text-align: center;
-    color : red;
-}
-
-#admin form {
-    margin: auto;
-}
-#admin #titre {
-    width: 50%;
-}
-
-#admin form input {
-    margin: 5px;
+header #chapitres:active, header #connexion:active {
+    visibility: inherit;
 }
 
 footer p {
@@ -91,4 +62,6 @@ footer p {
     height: 70px;
     text-align: center;
     margin-bottom: 0;
+    background-color: black;
+    color: white;
 }
