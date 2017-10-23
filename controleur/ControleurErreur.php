@@ -1,5 +1,7 @@
 <?php
 
+require_once ('vue/Vue.php');
+
 class ControleurErreur 
 {
     // Affiche une erreur
