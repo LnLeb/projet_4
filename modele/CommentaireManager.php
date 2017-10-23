@@ -1,7 +1,11 @@
 <?php
 
+// On appelle la classe qui fait la connexion à la BDD et les classes Billet et Commentaire pour récupérer les informations
 require_once 'modele/Modele.php';
+require_once 'modele/Billet.php';
+require_once 'modele/Commentaire.php';
 
+// Création de la classe CommentaireManager qui effectuera les requêtes en lien avec les commentaires
 class CommentaireManager extends Modele
 {
     // Récupération des commentaires
@@ -44,5 +48,15 @@ class CommentaireManager extends Modele
     {
         $sql = 'DELETE FROM commentaires WHERE id = '.$commentaire->id();
         $this->executerRequete($sql);
+    }
+    
+    // pour retourner le nombre total de commentaires 
+    public function count_commentaires()
+    {
+        $sql = 'SELECT COUNT(*) AS nb_commentaires FROM commentaires';
+        
+        $donnees = $this->executerRequete($sql);
+        $nb_commentaires = $donnees['nb_commentaires'];
+        return $nb_commentaires;
     }
 }
