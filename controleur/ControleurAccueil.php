@@ -1,31 +1,26 @@
 <?php
 
-require_once ('modele/Billet.php');
 require_once ('modele/BilletManager.php');
+require_once ('modele/CommentaireManager.php');
+require_once ('vue/Vue.php');
 
 class ControleurAccueil
 {
     private $billet;
+    private $commentaire;
     
     public function __construct()
     {
         $this->billet = new BilletManager();
+        $this->commentaire = new CommentaireManager();
     }
 
     // Affichage des billets
     public function accueil()
-    {
-        // pour la pagination : si le numéro de page est défini, sinon page 1 par défaut
-        if (isset($_GET['page']))
-        {
-            $page = $_GET['page'];
-        }
-        else 
-        {
-            $page = 1;
-        }
-        
-        $billets = $this->billet->get_billets(5 * ($page - 1), 5);
+    {  
+        $allBillets = $this->billet->get_billets(0, 500);
+        $derniersBillets = $this->billet->get_billets($this->billet->count_billets() - 3, 3);
+        $derniersCommentaires = $this->commentaire->get_commentaires($this->commentaire->count_commentaires() - 2, 2);
         
         // sécurisation de l'affichage
         foreach($billets as $cle=>$this->billet)
@@ -34,12 +29,7 @@ class ControleurAccueil
             $billets[$cle]['contenu'] = nl2br(htmlspecialchars($this->billet->contenu()));
         }
         
-        // pour connaître le nombre de billets
-        $nb_articles = new BilletManager;
-        $nb_articles->pagination_billets();
-        // qu'on divise par 5 pour avoir le nombre de pages à créer
-        $nb_pages = ceil($nb_articles/5);
-        
-        require('vue/accueil.php');
+        $vue = new Vue('accueil');
+        $vue->generer(array('billets' => $billets));
     }
 }
