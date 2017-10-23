@@ -1,4 +1,6 @@
 <?php
+
+// définition de la classe Billet pour générer des objets billet
 class Billet 
 {
     protected $id,
