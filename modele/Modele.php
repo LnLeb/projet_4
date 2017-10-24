@@ -10,12 +10,11 @@
         {
             if ($params == null) 
             {
-                $resutat = $this->getBdd()->query($sql);
+                $resultat = $this->getBdd()->query($sql);
             }
             else 
             {
                 $resultat = $this->getBdd()->prepare($sql);
-                $resultat->execute($params);
             }
             return $resultat;
         }
