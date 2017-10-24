@@ -15,11 +15,14 @@ class CommentaireManager extends Modele
         $limit = (int)$limit;
         
         $sql = 'SELECT id, id_billet, auteur, commentaire, DATE_FORMAT(date_commentaire, \'%d/%m/%Y\') AS date_comm, DATE_FORMAT(date_commentaire, \'%Hh%i\') AS heure_comm FROM commentaires ORDER BY date_commentaire LIMIT :offset, :limit';
-        $sql->bindParam(':offset', $offset, PDO::PARAM_INT);
-        $sql->bindParam(':limit', $limit, PDO::PARAM_INT);
         
-        $commentaires = $this->executerRequete($sql, array($offset, $limit));
-        return $commentaires->fetchAll();
+        $req = $this->executerRequete($sql, array('offset' => $offset, 'limit' => $limit));
+        $req->bindParam(':offset', $offset, PDO::PARAM_INT);
+        $req->bindParam(':limit', $limit, PDO::PARAM_INT);
+        $req->execute();
+        
+        $commentaires = $req->fetchAll();
+        return $commentaires;
     }
     
     // Ajout des nouveaux commentaires à la BDD
@@ -29,13 +32,15 @@ class CommentaireManager extends Modele
         {
             $sql = 'INSERT INTO commentaires (id_billet, auteur, commentaire, date_commentaire) VALUES(:id_billet, :auteur, :commentaire, NOW())';
             
-            $sql->bindValue(':id_billet', $commentaire->id_billet());
-            $sql->bindValue(':auteur', $commentaire->auteur());
-            $sql->bindValue(':commentaire', $commentaire->commentaire());
-            
-            $this->executerRequete($sql, array('id_billet'=>$_POST['id_billet'],
+            $req = $this->executerRequete($sql, array('id_billet'=>$_POST['id_billet'],
             'auteur'=>$_POST['auteur'],
             'commentaire'=>$_POST['comm']));
+            
+            $req->bindValue(':id_billet', $commentaire->id_billet());
+            $req->bindValue(':auteur', $commentaire->auteur());
+            $req->bindValue(':commentaire', $commentaire->commentaire());
+        
+            $req->execute();
             
             $commentaire->hydrate([
                 'id' => $this->bdd->lastInsertId()
@@ -46,17 +51,21 @@ class CommentaireManager extends Modele
     // Supprimer un commentaire de la BDD
     public function delete_commentaire(Commentaire $commentaire)
     {
-        $sql = 'DELETE FROM commentaires WHERE id = '.$commentaire->id();
-        $this->executerRequete($sql);
+        $sql = 'DELETE FROM commentaires WHERE id = :id';
+        $req = $this->executerRequete($sql, array('id' => $commentaire->id()));
+        $req->bindParam(':id', $billet->id(), PDO::PARAM_INT);
+
+        $req->execute();
     }
     
     // pour retourner le nombre total de commentaires 
     public function count_commentaires()
     {
         $sql = 'SELECT COUNT(*) AS nb_commentaires FROM commentaires';
+        $req = $this->executerRequete($sql);
+        $resultat = $req->fetch();
+        $nb_commentaires = (int)$resultat['nb_commentaires'];
         
-        $donnees = $this->executerRequete($sql);
-        $nb_commentaires = $donnees['nb_commentaires'];
         return $nb_commentaires;
     }
 }
