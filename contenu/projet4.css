@@ -17,9 +17,13 @@ li {
     list-style: none;
 }
 
+p {
+    text-align: justify;
+}
+
 header {
     width: 100%;
-    height: 100px;
+    height: 90px;
     background-color: black;
     color: white;
     text-align: center;
@@ -32,29 +36,112 @@ h1 {
 header p {
     font-style: italic;
     color: grey;
+    margin-left: 150px;
 }
 
-header nav {
+nav {
+    position: relative;
     width: 100%;
-    height: 40px;
+    height: 50px;
+    line-height: 50px;
     background-color: grey;
+    color: white;
+}
+
+nav a {
+    color: white;
+}
+
+nav ul {
+    width: 700px;
+    margin: auto;
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
     -ms-flex-pack: distribute;
     justify-content: space-around;
+}
+nav li {
+    margin: 0;
+    cursor: pointer;
+}
+
+#chapitres {
+    position: absolute;
+    left: 630px;
+    top: 124px;
+    z-index: 2;
+}
+
+#chapitres li {
+    border: 1px solid black;
+    padding: 15px;
+    background-color: lightgrey;
+    
+}
+
+#connexion {
+    position: absolute;
+    left: 950px;
+}
+
+#contenuAccueil {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
     -webkit-box-orient: horizontal;
     -webkit-box-direction: normal;
     -ms-flex-direction: row;
     flex-direction: row;
+    -ms-flex-pack: distribute;
+    justify-content: space-around;
+    margin-top: 80px;
 }
 
-header #chapitres, header #connexion {
-    visibility: hidden;
+#presentation {
+    width: 1100px;
 }
 
-header #chapitres:active, header #connexion:active {
-    visibility: inherit;
+#presentation h2 {
+    text-align: center;
+}
+
+section img {
+    width: 1000px;
+}
+
+#textePresentation {
+    position: absolute;
+    top: 280px;
+    left: 150px;
+    width: 700px;
+    background-color: rgba(255, 255, 255, 0.7);
+    font-size: 1.2em;
+}
+
+#derniersChap {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-pack: distribute;
+    justify-content: space-around;
+}
+
+#derniersChap div {
+    width: 300px;
+}
+
+aside {
+    width: 220px;
+    text-align: center;
+}
+aside img {
+    width: 180px;
+    padding: 20px;
+}
+
+#sectionCom {
+    padding: 20px;
 }
 
 footer p {
