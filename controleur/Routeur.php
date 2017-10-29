@@ -19,10 +19,10 @@ class Routeur
     
     public function __construct()
     {
-        $this->ctrlAccueil = new ControleurAccueil();
-        $this->ctrlBillet = new ControleurBillet();
-        $this->ctrlAdmin = new ControleurAdmin();
-        $this->ctrlErreur = new ControleurErreur();
+        $this->ctrlAccueil = new ControleurAccueil;
+        $this->ctrlBillet = new ControleurBillet;
+        $this->ctrlAdmin = new ControleurAdmin;
+        $this->ctrlErreur = new ControleurErreur;
     }
     
     public function routerRequete()
@@ -45,10 +45,6 @@ class Routeur
                             if(isset($_GET['page']))
                             {
                                 $page = intval($_GET['page']);
-                                if ($page != 0)
-                                {
-                                    $this->ctrlCommentaire->commentaire($page);
-                                }
                             }
                             // par défaut, la page des commentaires affichée sera la page 1
                             else
