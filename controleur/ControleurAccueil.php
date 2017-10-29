@@ -1,8 +1,8 @@
 <?php
 
-require_once ('modele/BilletManager.php');
-require_once ('modele/CommentaireManager.php');
-require_once ('vue/Vue.php');
+require_once('modele/BilletManager.php');
+require_once('modele/CommentaireManager.php');
+require_once('vue/Vue.php');
 
 class ControleurAccueil
 {
@@ -15,21 +15,23 @@ class ControleurAccueil
         $this->commentaire = new CommentaireManager;
     }
 
-    // 
+    // paramètres d'affichage des billets et des commentaires sur la page d'accueil et sécurisation de l'affichage
     public function accueil()
     {  
-        $allBillets = $this->billet->get_billets(0, 500);
+        // paramètres d'affichage des billets et des commentaires sur la page d'accueil
+        $allBillets = $this->billet->get_billets(0, $this->billet->count_billets());
         $derniersBillets = $this->billet->get_billets($this->billet->count_billets() - 3, 3);
-        $derniersCommentaires = $this->commentaire->get_commentaires($this->commentaire->count_commentaires() - 2, 2);
+        $derniersCommentaires = $this->commentaire->get_commentaires($this->commentaire->count_commentaires() - 3, 3);
+        
         
         // sécurisation de l'affichage
-        foreach($billets as $cle=>$this->billet)
+        foreach($derniersBillets as $cle=>$billet)
         {
-            $billets[$cle]['titre'] = htmlspecialchars($this->billet->titre());
-            $billets[$cle]['contenu'] = nl2br(htmlspecialchars($this->billet->contenu()));
+            $derniersBillets[$cle]['titre'] = htmlspecialchars($billet['titre']);
+            $derniersBillets[$cle]['contenu'] = nl2br(htmlspecialchars($billet['contenu']));
         }
         
         $vue = new Vue('accueil');
-        $vue->generer(array('billets' => $billets));
+        $vue->generer(array('allBillets' => $allBillets, 'derniersBillets' => $derniersBillets, 'derniersCommentaires' => $derniersCommentaires));
     }
 }
