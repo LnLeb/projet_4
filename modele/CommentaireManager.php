@@ -25,6 +25,23 @@ class CommentaireManager extends Modele
         return $commentaires;
     }
     
+    public function get_commentaires_by_id_billet($offset, $limit, $id)
+    {
+        $offset = (int)$offset;
+        $limit = (int)$limit;
+        $id = (int)$id;
+        
+        $sql = 'SELECT id, id_billet, auteur, commentaire, DATE_FORMAT(date_commentaire, \'%d/%m/%Y\') AS date_comm, DATE_FORMAT(date_commentaire, \'%Hh%i\') AS heure_comm FROM commentaires WHERE id_billet=:id ORDER BY date_commentaire LIMIT :offset, :limit';
+        $req = $this->executerRequete($sql, array('offset' => $offset, 'limit' => $limit));
+        $req->bindParam(':id', $id, PDO::PARAM_INT);
+        $req->bindParam(':offset', $offset, PDO::PARAM_INT);
+        $req->bindParam(':limit', $limit, PDO::PARAM_INT);
+        $req->execute();
+        
+        $commentairesById = $req->fetchAll();
+        return $commentairesById;
+    }
+    
     // Ajout des nouveaux commentaires à la BDD
     public function post_commentaire(Commentaire $commentaire)
     {
