@@ -24,14 +24,14 @@ class ControleurAdmin
             $billets = $this->billet->get_billets(0, 500);
         
             // sécurisation de l'affichage
-            foreach($billets as $cle=>$this->billet)
+            foreach($billets as $cle=>$billet)
             {
-                $billets[$cle]['titre'] = htmlspecialchars($this->billet->titre());
+                $billets[$cle]['titre'] = htmlspecialchars($billet['titre']);
             }
             
             // on affiche la page (vue)
             $vue = new Vue('admin');
-            $vue->generer(array('billet' => $billet));
+            $vue->generer(array('billets' => $billets));
         }
         else 
         {
