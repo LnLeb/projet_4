@@ -6,15 +6,16 @@
         private $bdd;
         
         // Pour éxecuter des requêtes éventuellement préparées
-        protected function executerRequete($sql, $params = null) 
+        protected function executerRequete($sql, $params = NULL) 
         {
-            if ($params == null) 
+            if ($params == NULL) 
             {
                 $resultat = $this->getBdd()->query($sql);
             }
             else 
             {
                 $resultat = $this->getBdd()->prepare($sql);
+                $resultat->execute($params);
             }
             return $resultat;
         }
@@ -24,15 +25,7 @@
         {
             if ($this->bdd == null)
             {
-                try
-                {
-                    $this->bdd = new PDO('mysql:host=localhost;dbname=projet4; charset=utf8', 'root', '', array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
-                }
-                catch (Exception $e)
-                {
-                    $msgErreur = $e->getMessage();
-                    require 'vue/erreur.php';
-                }
+                $this->bdd = new PDO('mysql:host=localhost;dbname=projet4; charset=utf8', 'root', '', array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
             }
             return $this->bdd;
         }
