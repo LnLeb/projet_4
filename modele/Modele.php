@@ -12,7 +12,7 @@
             {
                 $resultat = $this->getBdd()->query($sql);
             }
-            else 
+            else
             {
                 $resultat = $this->getBdd()->prepare($sql);
                 $resultat->execute($params);
@@ -25,7 +25,7 @@
         {
             if ($this->bdd == null)
             {
-                $this->bdd = new PDO('mysql:host=localhost;dbname=projet4; charset=utf8', 'root', '', array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
+                $this->bdd = new PDO('mysql:host=localhost;dbname=projet4; charset=utf8', 'root', '', array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION, PDO::ATTR_EMULATE_PREPARES => FALSE));
             }
             return $this->bdd;
         }
