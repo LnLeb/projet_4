@@ -9,62 +9,64 @@ require_once('modele/Commentaire.php');
 class BilletManager extends Modele
 {
     // méthode pour récupérer tous les billets
-    public function get_billets($offset, $limit)
+    public function getBillets($offset, $limit)
     {   
-        $sql = 'SELECT id, titre, extrait, contenu, DATE_FORMAT(date_creation, \'%d/%m/%Y\') AS date_crea, DATE_FORMAT(date_creation, \'%Hh%i\') AS heure_crea FROM billets ORDER BY id LIMIT ?, ?';
         $offset = (int)$offset;
         $limit = (int)$limit;
+        $sql = 'SELECT id, titre, extrait, contenu, DATE_FORMAT(date_creation, \'%d/%m/%Y\') AS dateCrea, DATE_FORMAT(date_creation, \'%Hh%i\') AS heureCrea FROM billets ORDER BY id LIMIT ?, ?';
+        
         $req = $this->executerRequete($sql, array($offset, $limit));
         $billets = $req->fetchAll();
         return $billets;
     }
     
     // méthode pour récupérer un seul billet en fonction de son id
-    public function getBilletById($id_billet)
+    public function getBilletById($idBillet)
     {
-        $id_billet = (int)$id_billet;
+        $idBillet = (int)$idBillet;
+        $sql = 'SELECT id, titre, extrait, contenu, DATE_FORMAT(date_creation, \'%d/%m/%Y\') AS dateCrea, DATE_FORMAT(date_creation, \'%Hh%i\') As heureCrea FROM billets WHERE id=:id_billet';
         
-        $sql = 'SELECT id, titre, extrait, contenu, DATE_FORMAT(date_creation, \'%d/%m/%Y\') AS date_crea, DATE_FORMAT(date_creation, \'%Hh%i\') As heure_crea FROM billets WHERE id=?';
-        $req = $this->executerRequete($sql, array($id_billet));
-        
+        $req = $this->executerRequete($sql, array($idBillet));
         $billet = $req->fetch();
         return $billet;
     }
     
     // méthode pour poster un nouveau billet dans la BDD
-    public function post_billet(Billet $billet) 
+    public function postBillet(Billet $billet) 
     {
         if(isset($_POST['extrait']))
         {
             $sql = 'INSERT INTO billets (titre, extrait, contenu, date_creation) VALUES(?, ?, ?, NOW())';
-            $array = array($billet->titre, $billet->extrait, $billet->contenu);
+            $array = array($billet->titre(), $billet->extrait(), $billet->contenu());
             $this->executerRequete($sql, $array);
         }
     }
     
     // méthode pour supprimer un billet de la BDD
-    public function delete_billet(Billet $billet)
+    public function deleteBillet($id)
     {
         $sql = 'DELETE FROM billets WHERE id = ?';
-        $this->executerRequete($sql, array($billet->id));
+        $this->executerRequete($sql, array($id));
     }
     
     // méthode pour modifier un billet de la BDD
-    public function update_billet(Billet $billet)
+    public function updateBillet($titre, $extrait, $contenu, $id)
     {
-        $sql = 'UPDATE billets SET titre = ?, contenu = ?, extrait = ? WHERE id = ?';
-        $array = array($billet->titre, $billet->contenu, $billet->extrait, $billet->id);
-        $this->executerRequete($sql, $array);
+        $sql = 'UPDATE billets SET titre = ?, extrait = ?, contenu = ? WHERE id = ?';
+        $array = array($titre, $extrait, $contenu, $id);
+        $nouveauBillet = $this->executerRequete($sql, $array);
+        
+        return $nouveauBillet;
     }
     
     // méthode pour renvoyer le nombre total de billets
-    public function count_billets()
+    public function countBillets()
     {
-        $sql = 'SELECT COUNT(*) AS nb_billets FROM billets';
+        $sql = 'SELECT COUNT(*) AS nbBillets FROM billets';
         $req = $this->executerRequete($sql);
         $resultat = $req->fetch();
-        $nb_billets = (int)$resultat['nb_billets'];
+        $nbBillets = (int)$resultat['nbBillets'];
         
-        return $nb_billets;
+        return $nbBillets;
     }
 }
