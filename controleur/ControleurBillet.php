@@ -2,6 +2,7 @@
 
 require_once('modele/BilletManager.php');
 require_once('modele/CommentaireManager.php');
+require_once('modele/Commentaire.php');
 require_once('vue/Vue.php');
 
 class ControleurBillet 
@@ -21,9 +22,10 @@ class ControleurBillet
         if (isset($_GET['id']))
         {
             $billet = $this->billet->getBilletById($_GET['id']);
-            
             // on demande les commentaires qui correspondent au bon billet
-            $commentaires = $this->commentaire->get_commentaires_by_id_billet(5 * ($_GET['page'] - 1), 5, $_GET['id']);
+            $allCommentaires = $this->commentaire->getCommentairesByIdBillet(0, $this->commentaire->countCommentairesValide(), $_GET['id']);
+            // on limite les commentaires à 5 par page pour la pagination
+            $commentaires = $this->commentaire->getCommentairesByIdBillet(5 * ($_GET['page'] - 1), 5, $_GET['id']);
             
             // s'il existe des commentaires
             if(!empty($commentaires))
@@ -34,17 +36,48 @@ class ControleurBillet
                     $commentaires[$cle]['auteur'] = htmlspecialchars($commentaire['auteur']);
                     $commentaires[$cle]['commentaire'] = nl2br(htmlspecialchars($commentaire['commentaire']));
                 }
+                foreach($allCommentaires as $cle=>$commentaire)
+                {
+                    $allCommentaires[$cle]['auteur'] = htmlspecialchars($commentaire['auteur']);
+                    $allCommentaires[$cle]['commentaire'] = nl2br(htmlspecialchars($commentaire['commentaire']));
+                }
             }
         }
         
-        $nb_billets = $this->billet->count_billets();
-        $nb_pages = ceil(sizeof($commentaires) / 5);
+        // pour la pagination des commentaires
+        $nbPages = ceil(sizeof($allCommentaires) / 5);
+        $nbBillets = $this->billet->countBillets();
         
+        // on génère la vue
         $vue = new Vue('commentaire');
         $vue->generer(array('billet' => $billet, 
                             'commentaires' => $commentaires, 
-                            'nb_pages' => $nb_pages, 
-                            'nb_billets' => $nb_billets
+                            'nbPages' => $nbPages, 
+                            'nbBillets' => $nbBillets
                            ));
+        
+    }
+    
+    // pour poster un nouveau commentaire
+    public function commenter($auteur, $comm, $idBillet)
+    {
+        $donnees = array('auteur' => $auteur,
+                         'commentaire' => $comm,
+                         'idBillet' => $idBillet);
+    
+        $commentaire = new Commentaire($donnees);
+        $commentaire->setAuteur($auteur);
+        $commentaire->setCommentaire($comm);
+        $commentaire->setIdBillet($idBillet);
+        
+        $this->commentaire->postCommentaire($commentaire);
+        header('Location: index.php?action=billet&id='.$idBillet.'&page=1#postComm');
+    }
+    
+    // pour signaler un commentaire 
+    public function signalerCom($idCom, $idBillet)
+    {
+        $this->commentaire->updateCommentaire('FALSE', $idCom);
+        header('Location: index.php?action=billet&id='.$idBillet.'&page=1#postComm');
     }
 }   
