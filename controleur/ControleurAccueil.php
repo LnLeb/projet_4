@@ -8,6 +8,8 @@ class ControleurAccueil
 {
     private $billet;
     private $commentaire;
+    private $countBillet;
+    private $countComm;
     
     public function __construct()
     {
@@ -19,18 +21,29 @@ class ControleurAccueil
     public function accueil()
     {  
         // paramètres d'affichage des billets et des commentaires sur la page d'accueil
-        $allBillets = $this->billet->get_billets(0, $this->billet->count_billets());
-        $derniersBillets = $this->billet->get_billets($this->billet->count_billets() - 3, 3);
-        $derniersCommentaires = $this->commentaire->get_commentaires($this->commentaire->count_commentaires() - 3, 3);
-        
+        $allBillets = $this->billet->getBillets(0, $this->billet->countBillets());
+        $this->countBillet = $this->billet->countBillets() - 3;
+        $derniersBillets = $this->billet->getBillets($this->countBillet, 3);
+        $this->countComm = $this->commentaire->countCommentairesValide() - 3;
+        $derniersCommentaires = $this->commentaire->getCommentairesValide($this->countComm, 3);
         
         // sécurisation de l'affichage
         foreach($derniersBillets as $cle=>$billet)
         {
             $derniersBillets[$cle]['titre'] = htmlspecialchars($billet['titre']);
-            $derniersBillets[$cle]['contenu'] = nl2br(htmlspecialchars($billet['contenu']));
+            $derniersBillets[$cle]['extrait'] = nl2br(htmlspecialchars($billet['extrait']));
+        }
+        foreach($allBillets as $cle=>$billet)
+        {
+            $allBillets[$cle]['titre'] = htmlspecialchars($billet['titre']);
+        }
+        foreach($derniersCommentaires as $cle=>$commentaire)
+        {
+            $derniersCommentaires[$cle]['auteur'] = htmlspecialchars($commentaire['auteur']);
+            $derniersCommentaires[$cle]['commentaire'] = nl2br(htmlspecialchars($commentaire['commentaire']));
         }
         
+        // on génère la vue
         $vue = new Vue('accueil');
         $vue->generer(array('allBillets' => $allBillets, 'derniersBillets' => $derniersBillets, 'derniersCommentaires' => $derniersCommentaires));
     }
