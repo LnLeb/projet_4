@@ -7,7 +7,6 @@ if(empty($billet))
 // sinon on affiche le contenu :
 else
 {
-// titre de la page
 $this->titre = $billet['titre']; ?>
 
 <!-- Menu de navigation -->
@@ -16,15 +15,15 @@ $this->titre = $billet['titre']; ?>
         <li><a href="index.php">Accueil</a></li>
         <?php if($_GET['id'] > 1)
         {?>
-        <li><a href="index.php?action=billet&id=<?php echo $_GET['id']-1; ?>&page=1">Chapitre précédent</a></li>
+        <li><a href="index.php?action=billet&id=<?= $_GET['id']-1; ?>&page=1">Chapitre précédent</a></li>
         <?php
         }?>
-        <?php if($_GET['id'] < $nb_billets)
+        <?php if($_GET['id'] < $nbBillets)
         {?>
-        <li><a href="index.php?action=billet&id=<?php echo $_GET['id']+1; ?>&page=1">Chapitre suivant</a></li>
+        <li><a href="index.php?action=billet&id=<?= $_GET['id']+1; ?>&page=1">Chapitre suivant</a></li>
         <?php
         }?>
-        <li>Connexion</li>
+        <li><a href="#connexion">Connexion</a></li>
     </ul>
 </nav>
 <!-- Affichage de la connexion dans la navigation -->
@@ -34,71 +33,67 @@ $this->titre = $billet['titre']; ?>
     <label for="motdepasse">Mot de passe : </label>
     <input type="password" name="motdepasse" id="motdepasse"><br>
     <input type="submit" value="Connexion">
-    <button><a href="index.php">Déconnexion</a></button>
+    <a href="index.php?action=deconnexion"><button>Déconnexion</button></a>
 </form>
-<?php 
-if (isset($_POST['identifiant']) AND $_POST['identifiant'] != "Jean.Forteroche" AND isset($_POST['motdepasse']) AND $_POST['motdepasse'] != "alaska2.0") 
-{
-    echo '<p id="erreur">Identifiant ou mot de passe incorrect</p>';
-}
-?>
 
 <!-- Affichage du billet qui correspond à l'id passé dans l'URL -->
 <section id="sectionCom">
-    <h2><?php echo $billet['titre']; ?></h2>
+    <h2><?= $billet['titre']; ?></h2>
     <p>
-        <em>Posté le <?php echo $billet['date_crea']; ?> à <?php echo $billet['heure_crea']; ?></em>
+        <em>Publié le <?= $billet['dateCrea']; ?> à <?= $billet['heureCrea']; ?></em>
     </p>
-    <p><?php echo $billet['contenu']; ?></p>
+    <p><?= $billet['contenu']; ?></p>
 
-    <!-- Affichage des commentaires qui correspondent au bon billet --><h2>Commentaires</h2>
+    <!-- Affichage des commentaires qui correspondent au bon billet --><h2 id="postComm">Commentaires</h2>
     <?php 
-    // s'il n'y a pas de commentaires pour ce billet
-    if (empty($commentaires))
-    {
-        echo 'Pas de commentaires';
-    }
-    // sinon on les affiche
-        else 
+    if(!empty($commentaires))
     {
         foreach($commentaires as $commentaire)
         {
-            if ($commentaire['id_billet'] == $_GET['id'])
+            if ($commentaire['id_billet'] == $_GET['id'] && $commentaire['valide'] == 'TRUE')
             {
             ?>
-                <h3><?php echo $commentaire['auteur']; ?></h3>
+                <h3><?= $commentaire['auteur']; ?></h3>
                 <p>
-                    <em>Posté le <?php echo $commentaire['date_comm']; ?> à <?php echo $commentaire['heure_comm']; ?></em>
+                    <em>Posté le <?= $commentaire['dateComm']; ?> à <?= $commentaire['heureComm']; ?></em>
                 </p>
-                <p><?php echo $commentaire['commentaire']; ?></p>
-            <?php
-            }
-        }
-        // pagination s'il y a plus d'une page de comms
-        if ($nb_pages > 1)
-        {
-            echo 'Page : ';
-            for($i=1; $i<$nb_pages+1; $i++)
-            {
-            ?>
-                <a href="index.php?action=billet&id=<?php echo $_GET['id']; ?>&page=<?php echo $i; ?>"><?php echo $i; ?></a>
+                <p><?= $commentaire['commentaire']; ?></p>
+                <form method="post" action="index.php?action=signalerCom&idCom=<?= $commentaire['id']; ?>&idBillet=<?= $commentaire['id_billet']; ?>">
+                <label for="signaler">Ce commentaire vous paraît déplacé? : </label>
+                <input type="submit" name="signaler" value="Signaler">
+                </form>
             <?php
             }
         }
     }
-    ?>
-    
+    else
+    {
+        echo 'Aucun commentaire';
+    }
+    // pagination s'il y a plus d'une page de comms
+    if ($nbPages > 1)
+    {
+        echo '<br>Page : ';
+        for($i=1; $i<$nbPages+1; $i++)
+        {
+        ?>
+            <a href="index.php?action=billet&id=<?= $_GET['id']; ?>&page=<?= $i; ?>#postComm"><?= $i; ?></a>
+        <?php
+        }
+    }
+    ?>    
     <!-- Pour poster un nouveau commentaire -->
-    <form method="post" action="index.php?action=billet&id=<?php echo $_GET['id']; ?>">
+    <h2 id="ajoutCom">Ajouter un commentaire : </h2>
+    <form method="post" action="index.php?action=commenter&id=<?= $_GET['id']; ?>&page=1">
         <p>
             <label for="auteur">Pseudo : </label><br>
             <input type="text" name="auteur" id="auteur"><br>
             <label for="comm">Commentaire : </label><br>
             <textarea name="comm" id="comm" rows="4" cols="25"></textarea><br>
-            <input type="hidden" name="id_billet" value="<?php echo $_GET['id']; ?>">
+            <input type="hidden" name="idBillet" value="<?= $_GET['id']; ?>">
             <input type="submit" value="Valider">
         </p>
-    </form>                
+    </form>
 </section>
 <?php
 }
