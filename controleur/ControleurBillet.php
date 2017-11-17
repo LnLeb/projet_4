@@ -21,6 +21,7 @@ class ControleurBillet
         // s'il existe un billet correspondant à l'id passé par l'url on récupère uniquement le bon billet pour l'afficher avec les commentaires
         if (isset($_GET['id']))
         {
+            $allBillets = $this->billet->getBillets(0, $this->billet->countBillets());
             $billet = $this->billet->getBilletById($_GET['id']);
             // on demande les commentaires qui correspondent au bon billet
             $allCommentaires = $this->commentaire->getCommentairesByIdBillet(0, $this->commentaire->countCommentairesValide(), $_GET['id']);
@@ -44,6 +45,47 @@ class ControleurBillet
             }
         }
         
+        // pour la gestion des fonds d'écran
+        $count = $this->billet->countBillets();
+        $i=1;
+        while($i<=$count)
+        {
+            if($_GET['id'] == $i)
+            { 
+                $section = 'com1';
+            }
+            elseif($_GET['id'] == $i+1)
+            {
+                $section = 'com2';
+            }
+            elseif($_GET['id'] == $i+2)
+            {
+                $section = 'com3';
+            }
+            elseif($_GET['id'] == $i+3)
+            {
+                $section = 'com4';
+            }
+            elseif($_GET['id'] == $i+4)
+            {
+                $section = 'com5';
+            }
+            $i= $i+5;
+        }
+        
+        
+        // gestion du lien de connexion
+        $this->titre = $billet['titre']; 
+
+        if (isset($_SESSION['identifiant']))
+        {
+            $connexion = '?action=admin';
+        }
+        else 
+        {
+            $connexion = '#connexion';
+        }
+        
         // pour la pagination des commentaires
         $nbPages = ceil(sizeof($allCommentaires) / 5);
         $nbBillets = $this->billet->countBillets();
@@ -53,7 +95,10 @@ class ControleurBillet
         $vue->generer(array('billet' => $billet, 
                             'commentaires' => $commentaires, 
                             'nbPages' => $nbPages, 
-                            'nbBillets' => $nbBillets
+                            'nbBillets' => $nbBillets,
+                            'allBillets' => $allBillets,
+                            'section' => $section, 
+                            'connexion' => $connexion
                            ));
         
     }
@@ -64,20 +109,20 @@ class ControleurBillet
         $donnees = array('auteur' => $auteur,
                          'commentaire' => $comm,
                          'idBillet' => $idBillet);
-    
         $commentaire = new Commentaire($donnees);
         $commentaire->setAuteur($auteur);
         $commentaire->setCommentaire($comm);
         $commentaire->setIdBillet($idBillet);
         
         $this->commentaire->postCommentaire($commentaire);
-        header('Location: index.php?action=billet&id='.$idBillet.'&page=1#postComm');
+        $_SESSION['info'] = 'Votre commentaire a bien été publié ! ';
+        header('Location: index.php?action=billet&id='.$idBillet.'&page=1#ajoutCom');
     }
     
     // pour signaler un commentaire 
     public function signalerCom($idCom, $idBillet)
     {
         $this->commentaire->updateCommentaire('FALSE', $idCom);
-        header('Location: index.php?action=billet&id='.$idBillet.'&page=1#postComm');
+        header('Location: index.php?action=billet&id='.$idBillet.'&page=1#postCom');
     }
 }   
