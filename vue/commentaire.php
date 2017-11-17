@@ -7,7 +7,7 @@ if(empty($billet))
 // sinon on affiche le contenu :
 else
 {
-$this->titre = $billet['titre']; ?>
+?>
 
 <!-- Menu de navigation -->
 <nav>
@@ -23,28 +23,22 @@ $this->titre = $billet['titre']; ?>
         <li><a href="index.php?action=billet&id=<?= $_GET['id']+1; ?>&page=1">Chapitre suivant</a></li>
         <?php
         }?>
-        <li><a href="#connexion">Connexion</a></li>
     </ul>
 </nav>
-<!-- Affichage de la connexion dans la navigation -->
-<form method="post" action="index.php?action=admin" id="connexion">
-    <label for="identifiant">Identifiant : </label>
-    <input type="text" name="identifiant" id="identifiant"><br>
-    <label for="motdepasse">Mot de passe : </label>
-    <input type="password" name="motdepasse" id="motdepasse"><br>
-    <input type="submit" value="Connexion">
-    <a href="index.php?action=deconnexion"><button>Déconnexion</button></a>
-</form>
 
-<!-- Affichage du billet qui correspond à l'id passé dans l'URL -->
-<section id="sectionCom">
+<section id="<?= $section ?>">
+    <div id="sectionCom">
     <h2><?= $billet['titre']; ?></h2>
+    <p><?= $billet['contenu']; ?></p>
     <p>
         <em>Publié le <?= $billet['dateCrea']; ?> à <?= $billet['heureCrea']; ?></em>
     </p>
-    <p><?= $billet['contenu']; ?></p>
+    
+    <?php if(isset($_SESSION['identifiant'])) {
+        echo '<a href="index.php?action=admin&rubrique=update&id='. $billet['id'].'">Mettre à jour le billet</a> | <a href="index.php?action=admin&rubrique=deleteBillet&id='. $billet['id'].'">Supprimer</a>';
+    } ?>
 
-    <!-- Affichage des commentaires qui correspondent au bon billet --><h2 id="postComm">Commentaires</h2>
+    <!-- Affichage des commentaires qui correspondent au bon billet --><h2 id="postCom">Commentaires</h2>
     <?php 
     if(!empty($commentaires))
     {
@@ -57,10 +51,10 @@ $this->titre = $billet['titre']; ?>
                 <p>
                     <em>Posté le <?= $commentaire['dateComm']; ?> à <?= $commentaire['heureComm']; ?></em>
                 </p>
-                <p><?= $commentaire['commentaire']; ?></p>
+                <p>" <?= $commentaire['commentaire']; ?> "</p>
                 <form method="post" action="index.php?action=signalerCom&idCom=<?= $commentaire['id']; ?>&idBillet=<?= $commentaire['id_billet']; ?>">
-                <label for="signaler">Ce commentaire vous paraît déplacé? : </label>
-                <input type="submit" name="signaler" value="Signaler">
+                    <label for="signaler"><em>Ce commentaire vous paraît déplacé ?</em></label>
+                <input type="submit" name="signaler" value="Signaler" id="bouton">
                 </form>
             <?php
             }
@@ -77,23 +71,32 @@ $this->titre = $billet['titre']; ?>
         for($i=1; $i<$nbPages+1; $i++)
         {
         ?>
-            <a href="index.php?action=billet&id=<?= $_GET['id']; ?>&page=<?= $i; ?>#postComm"><?= $i; ?></a>
+            <a href="index.php?action=billet&id=<?= $_GET['id']; ?>&page=<?= $i; ?>#postComm"><?= $i; ?></a> | 
         <?php
         }
     }
     ?>    
     <!-- Pour poster un nouveau commentaire -->
     <h2 id="ajoutCom">Ajouter un commentaire : </h2>
-    <form method="post" action="index.php?action=commenter&id=<?= $_GET['id']; ?>&page=1">
-        <p>
-            <label for="auteur">Pseudo : </label><br>
+    <form method="post" action="index.php?action=commenter">
+        <p id="formulaireCom">
+            <label for="auteur">Votre pseudo : </label><br>
             <input type="text" name="auteur" id="auteur"><br>
-            <label for="comm">Commentaire : </label><br>
-            <textarea name="comm" id="comm" rows="4" cols="25"></textarea><br>
+            <label for="comm">Votre commentaire : </label><br>
+            <textarea name="comm" id="comm" rows="7" cols="50"></textarea><br>
             <input type="hidden" name="idBillet" value="<?= $_GET['id']; ?>">
-            <input type="submit" value="Valider">
+            <input type="submit" value="Valider" class="bouton">
+        </p>
+        <p class="info">
+            <?php 
+            if(isset($_SESSION['info']) || $_SESSION['info'] != '')
+            {
+                echo $_SESSION['info']; 
+            }
+            ?>
         </p>
     </form>
+    </div>
 </section>
 <?php
 }
