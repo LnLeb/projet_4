@@ -36,6 +36,8 @@
         {
             echo $_SESSION['info']; 
         }
+        set_time_limit(3);
+        $_SESSION['info'] = '';
         ?>
         </p>
     </article>
@@ -66,14 +68,6 @@
             }
             ?>
         </table>
-        <p class="info">
-        <?php 
-        if(isset($_SESSION['info']) || $_SESSION['info'] != '')
-        {
-            echo $_SESSION['info']; 
-        }
-        ?>
-        </p>
     </article>
     </div>
 </section>
