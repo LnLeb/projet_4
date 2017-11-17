@@ -2,7 +2,7 @@
 <!-- menu de navigation -->
 <nav>
     <ul>
-        <li><a href='index.php?action=admin'>Chapitres en ligne</a></li>
+        <li><a href='index.php'>Accueil</a></li>
         <li><a href='index.php?action=admin&rubrique=nouveauChapitre'>Nouveau chapitre</a></li>
         <li><a href='index.php?action=admin#gestionComm'>Gestion des commentaires</a></li>
         <li><a href='index.php?action=admin&rubrique=deconnexion'>Déconnexion</a></li>
@@ -11,6 +11,7 @@
 
 <!-- liste des chapitres publiés -->
 <section id="admin">
+    <div class=administration>
     <article id="chapitresEnLigne">
         <h2>Chapitres en ligne : </h2>
         <table>
@@ -21,6 +22,7 @@
             <tr>
                 <h3><?= $billet['titre']; ?></h3>
                 <p><?=$billet['extrait']; ?></p>
+                <a href="index.php?action=billet&id=<?=$billet['id'] ?>&page=1">Lire</a> | 
                 <a href="index.php?action=admin&rubrique=update&id=<?= $billet['id']; ?>">Mettre à jour</a> |
                 <a href="index.php?action=admin&rubrique=deleteBillet&id=<?= $billet['id']; ?>">Supprimer</a> 
             </tr>
@@ -28,6 +30,14 @@
             }
             ?>
         </table> 
+        <p class="info">
+        <?php 
+        if(isset($_SESSION['info']) || $_SESSION['info'] != '')
+        {
+            echo $_SESSION['info']; 
+        }
+        ?>
+        </p>
     </article>
 
     <!-- commentaires signalés à valider -->
@@ -56,5 +66,14 @@
             }
             ?>
         </table>
+        <p class="info">
+        <?php 
+        if(isset($_SESSION['info']) || $_SESSION['info'] != '')
+        {
+            echo $_SESSION['info']; 
+        }
+        ?>
+        </p>
     </article>
+    </div>
 </section>
