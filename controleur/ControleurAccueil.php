@@ -28,15 +28,6 @@ class ControleurAccueil
         $derniersCommentaires = $this->commentaire->getCommentairesValide($this->countComm, 3);
         
         // sécurisation de l'affichage
-        foreach($derniersBillets as $cle=>$billet)
-        {
-            $derniersBillets[$cle]['titre'] = htmlspecialchars($billet['titre']);
-            $derniersBillets[$cle]['extrait'] = nl2br(htmlspecialchars($billet['extrait']));
-        }
-        foreach($allBillets as $cle=>$billet)
-        {
-            $allBillets[$cle]['titre'] = htmlspecialchars($billet['titre']);
-        }
         foreach($derniersCommentaires as $cle=>$commentaire)
         {
             $derniersCommentaires[$cle]['auteur'] = htmlspecialchars($commentaire['auteur']);
