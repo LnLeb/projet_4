@@ -123,6 +123,7 @@ class ControleurBillet
     public function signalerCom($idCom, $idBillet)
     {
         $this->commentaire->updateCommentaire('FALSE', $idCom);
+        $_SESSION['info'] = 'Le commentaire a été signalé à l\'auteur, merci. ';
         header('Location: index.php?action=billet&id='.$idBillet.'&page=1#postCom');
     }
 }   
