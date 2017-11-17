@@ -36,8 +36,8 @@ class BilletManager extends Modele
     {
         if(isset($_POST['extrait']))
         {
-            $sql = 'INSERT INTO billets (titre, extrait, contenu, date_creation) VALUES(?, ?, ?, NOW())';
-            $array = array($billet->titre(), $billet->extrait(), $billet->contenu());
+            $sql = 'INSERT INTO billets (id, titre, extrait, contenu, date_creation) VALUES(?, ?, ?, ?, NOW())';
+            $array = array($billet->id(), $billet->titre(), $billet->extrait(), $billet->contenu());
             $this->executerRequete($sql, $array);
         }
     }
