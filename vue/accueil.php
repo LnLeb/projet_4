@@ -37,6 +37,8 @@ else {
         {
             echo $_SESSION['info']; 
         }
+            set_time_limit(3);
+            $_SESSION['info'] = '';
         ?>
         </p>
     </form>
