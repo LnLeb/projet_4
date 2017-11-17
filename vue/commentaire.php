@@ -38,7 +38,8 @@ else
         echo '<a href="index.php?action=admin&rubrique=update&id='. $billet['id'].'">Mettre à jour le billet</a> | <a href="index.php?action=admin&rubrique=deleteBillet&id='. $billet['id'].'">Supprimer</a>';
     } ?>
 
-    <!-- Affichage des commentaires qui correspondent au bon billet --><h2 id="postCom">Commentaires</h2>
+    <!-- Affichage des commentaires qui correspondent au bon billet -->
+    <h2 id="postCom">Commentaires</h2>
     <?php 
     if(!empty($commentaires))
     {
@@ -87,12 +88,14 @@ else
             <input type="hidden" name="idBillet" value="<?= $_GET['id']; ?>">
             <input type="submit" value="Valider" class="bouton">
         </p>
-        <p class="info">
+         <p class="info">
             <?php 
             if(isset($_SESSION['info']) || $_SESSION['info'] != '')
             {
                 echo $_SESSION['info']; 
             }
+            set_time_limit(3);
+            $_SESSION['info'] = '';
             ?>
         </p>
     </form>
