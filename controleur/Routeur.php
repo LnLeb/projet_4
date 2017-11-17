@@ -79,7 +79,7 @@ class Routeur
                                 {
                                     $auteur = $this->getParametre($_POST, 'auteur');
                                     $comm = $this->getParametre($_POST, 'comm');
-
+                                    
                                     $this->ctrlBillet->commenter($auteur, $comm, $idBillet);
                                 }
                                 else 
@@ -118,13 +118,13 @@ class Routeur
                             $this->ctrlAdmin->errConnexion();    
                         }
                         // si l'action définie est admin et que le mot de passe et l'identifiant sont bons : on sera sur la page d'administration du site 
-                        elseif (isset($_POST['identifiant']) AND ($_POST['identifiant']) == "Jean.Forteroche" AND isset($_POST['motdepasse']) AND hash('sha256', $_POST['motdepasse']) == 'cf6f8a4f0373bfc7497a888d2f7dc0d84d9fd925550367b0af7da2fa7c3714f5') 
+                        elseif ((isset($_POST['identifiant']) AND ($_POST['identifiant']) == "Jean.Forteroche" AND isset($_POST['motdepasse']) AND hash('sha256', $_POST['motdepasse']) == 'cf6f8a4f0373bfc7497a888d2f7dc0d84d9fd925550367b0af7da2fa7c3714f5') || (isset($_SESSION['identifiant'])))
                         {  
-                            $identifiant = $_POST['identifiant'];
-                            $_SESSION['identifiant'] = $identifiant;
+                            if (isset($_POST['identifiant']))
+                            {
+                                $_SESSION['identifiant'] =  $_POST['identifiant'];
+                            }
 
-                            $this->ctrlAdmin->admin();
-                            
                             if (isset($_GET['rubrique']) && isset($_SESSION['identifiant']))
                             {
                                 switch($_GET['rubrique'])
@@ -133,12 +133,13 @@ class Routeur
                                         $this->ctrlAdmin->nouveauChapitre();
                                     break;
                                     case 'postBillet':
-                                        if(!empty($_POST['titre']) && !empty($_POST['extrait']) && !empty($_POST['contenu']))
+                                        if(!empty($_POST['id']) && !empty($_POST['titre']) && !empty($_POST['extrait']) && !empty($_POST['contenu']))
                                         {
+                                            $id = $this->getParametre($_POST, 'id');
                                             $titre = $this->getParametre($_POST, 'titre');
                                             $extrait = $this->getParametre($_POST, 'extrait');
                                             $contenu = $this->getParametre($_POST, 'contenu');
-                                            $this->ctrlAdmin->postBillet($titre, $extrait, $contenu);
+                                            $this->ctrlAdmin->postBillet($id, $titre, $extrait, $contenu);
                                         }
                                         else 
                                         {
@@ -160,14 +161,14 @@ class Routeur
                                     case 'updateBillet':
                                         if(isset($_GET['id']))
                                         {
-                                            if(!empty($_POST['titre']) && !empty($_POST['extrait']) && !empty($_POST['contenu']))
-                                            {
-                                            $titre = $this->getParametre($_POST, 'titre');
-                                            $extrait = $this->getParametre($_POST, 'extrait');
-                                            $contenu = $this->getParametre($_POST, 'contenu');
                                             $id = $this->getParametre($_GET, 'id');
                                             $id =(int)$id;
-                                            $this->ctrlAdmin->updateBillet($titre, $extrait, $contenu, $id);
+                                            if(!empty($_POST['titre']) && !empty($_POST['extrait']) && !empty($_POST['contenu']))
+                                            {
+                                                $titre = $this->getParametre($_POST, 'titre');
+                                                $extrait = $this->getParametre($_POST, 'extrait');
+                                                $contenu = $this->getParametre($_POST, 'contenu');
+                                                $this->ctrlAdmin->updateBillet($titre, $extrait, $contenu, $id);
                                             }
                                             else 
                                             {
@@ -219,6 +220,10 @@ class Routeur
                                         $this->ctrlAdmin->deconnexion();
                                     break;
                                 }
+                            }
+                            else 
+                            {
+                                $this->ctrlAdmin->admin();
                             }
                         }
                     break;
