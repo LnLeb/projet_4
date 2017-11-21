@@ -3,6 +3,7 @@
 require_once('controleur/ControleurAccueil.php');
 require_once('controleur/ControleurAdmin.php');
 require_once('controleur/ControleurBillet.php');
+require_once('controleur/ControleurConnexion.php');
 
 // définition de la classe Routeur qui gère l'affichage des pages en fonction des paramètres transmis par l'url ou affiche des messages d'erreur
 class Routeur
@@ -10,12 +11,14 @@ class Routeur
     private $ctrlAccueil;
     private $ctrlBillet;
     private $ctrlAdmin;
+    private $connexion;
     
     public function __construct()
     {
         $this->ctrlAccueil = new ControleurAccueil;
         $this->ctrlBillet = new ControleurBillet;
         $this->ctrlAdmin = new ControleurAdmin;
+        $this->ctrlConnexion = new ControleurConnexion;
     }
     
     // rechercher un paramètre dans un tableau
@@ -113,12 +116,12 @@ class Routeur
                     break;
                     case 'admin': 
                         // si le mot de passe et l'identifiant ne sont pas corrects on retourne sur la page d'accueil
-                        if (isset($_POST['identifiant']) AND $_POST['identifiant'] != "Jean.Forteroche" OR isset($_POST['motdepasse']) AND hash('sha256', $_POST['motdepasse']) != 'cf6f8a4f0373bfc7497a888d2f7dc0d84d9fd925550367b0af7da2fa7c3714f5')
+                        if (isset($_POST['identifiant']) AND $_POST['identifiant'] != $this->ctrlConnexion->identifiant() OR isset($_POST['motdepasse']) AND hash('sha256', $_POST['motdepasse']) != $this->ctrlConnexion->motdepasse())
                         {
                             $this->ctrlAdmin->errConnexion();    
                         }
                         // si l'action définie est admin et que le mot de passe et l'identifiant sont bons : on sera sur la page d'administration du site 
-                        elseif ((isset($_POST['identifiant']) AND ($_POST['identifiant']) == "Jean.Forteroche" AND isset($_POST['motdepasse']) AND hash('sha256', $_POST['motdepasse']) == 'cf6f8a4f0373bfc7497a888d2f7dc0d84d9fd925550367b0af7da2fa7c3714f5') || (isset($_SESSION['identifiant'])))
+                        elseif ((isset($_POST['identifiant']) AND ($_POST['identifiant']) == $this->ctrlConnexion->identifiant() AND isset($_POST['motdepasse']) AND hash('sha256', $_POST['motdepasse']) == $this->ctrlConnexion->motdepasse()) || (isset($_SESSION['identifiant'])))
                         {  
                             if (isset($_POST['identifiant']))
                             {
@@ -132,6 +135,81 @@ class Routeur
                                     case 'nouveauChapitre':
                                         $this->ctrlAdmin->nouveauChapitre();
                                     break;
+                                    case 'postChap':
+                                        if(!empty($_POST['titre']) && !empty($_POST['extrait']) && !empty($_POST['contenu']))
+                                        {
+                                            $titre = $this->getParametre($_POST, 'titre');
+                                            $extrait = $this->getParametre($_POST, 'extrait');
+                                            $contenu = $this->getParametre($_POST, 'contenu');
+                                            $this->ctrlAdmin->postChapitre($titre, $extrait, $contenu);
+                                        }
+                                    break;
+                                    case 'apercu': 
+                                        if(isset($_GET['id']))
+                                        {
+                                            $id = $this->getParametre($_GET, 'id');
+                                            $id = (int)$id;
+                                            $this->ctrlAdmin->apercu($id);
+                                        }
+                                        else
+                                        {
+                                            throw new Exception('Pas d\'identifiant de chapitre passé en paramètre');
+                                        }
+                                    break;
+                                    case 'updateChap': 
+                                        if(isset($_GET['id']))
+                                        {
+                                            $id = $this->getParametre($_GET, 'id');
+                                            $id = (int) $id;
+                                            $this->ctrlAdmin->updateChap($id);
+                                        }
+                                        else 
+                                        {
+                                            throw new Exception('Pas d\'identifiant de chapitre en paramètre');
+                                        }
+                                    break;
+                                    case 'updateChapitre':
+                                        if(isset($_GET['id']))
+                                        {
+                                            $id = $this->getParametre($_GET, 'id');
+                                            $id =(int)$id;
+                                            if(!empty($_POST['titre']) && !empty($_POST['extrait']) && !empty($_POST['contenu']))
+                                            {
+                                                $titre = $this->getParametre($_POST, 'titre');
+                                                $extrait = $this->getParametre($_POST, 'extrait');
+                                                $contenu = $this->getParametre($_POST, 'contenu');
+                                                $this->ctrlAdmin->updateChapitre($titre, $extrait, $contenu, $id);
+                                            }
+                                            else 
+                                            {
+                                                throw new Exception('Tous les champs ne sont pas remplis !');
+                                            }
+                                        }
+                                        else
+                                        {
+                                            throw new Exception('Pas d\'id de billet en paramètre');
+                                        }
+                                    break;
+                                    case 'deleteChapitre':
+                                        if(isset($_GET['id']))
+                                        {
+                                            $id = $this->getParametre($_GET, 'id');
+                                            $id = (int)$id;
+                                            $this->ctrlAdmin->deleteChapitre($id);
+                                        }
+                                        else
+                                        {
+                                            throw new Exception('Pas d\'id de chapitre à supprimer en paramètre');
+                                        }
+                                    break;
+                                    case 'publierChap':
+                                        if(isset($_GET['id']))
+                                        {
+                                            $id = $this->getParametre($_GET, 'id');
+                                            $id = (int)$id;
+                                            $this->ctrlAdmin->publierChap($id);
+                                        }
+                                    break;
                                     case 'postBillet':
                                         if(!empty($_POST['id']) && !empty($_POST['titre']) && !empty($_POST['extrait']) && !empty($_POST['contenu']))
                                         {
@@ -140,6 +218,7 @@ class Routeur
                                             $extrait = $this->getParametre($_POST, 'extrait');
                                             $contenu = $this->getParametre($_POST, 'contenu');
                                             $this->ctrlAdmin->postBillet($id, $titre, $extrait, $contenu);
+                                            $this->ctrlAdmin->deleteChapitre($id);
                                         }
                                         else 
                                         {
