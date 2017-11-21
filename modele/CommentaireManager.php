@@ -13,10 +13,16 @@ class CommentaireManager extends Modele
     {
         $offset = (int)$offset;
         $limit = (int)$limit;
-        $sql = 'SELECT id, id_billet, auteur, commentaire, DATE_FORMAT(date_commentaire, \'%d/%m/%Y\') AS dateComm, DATE_FORMAT(date_commentaire, \'%Hh%i\') AS heureComm, valide FROM commentaires WHERE valide=\'FALSE\' ORDER BY date_commentaire LIMIT :offset, :limit';
+        $sql = 'SELECT id, id_billet, auteur, commentaire, DATE_FORMAT(date_commentaire, \'%d/%m/%Y\') AS dateCommentaire, valide FROM commentaires WHERE valide=\'FALSE\' ORDER BY date_commentaire LIMIT :offset, :limit';
         
         $req = $this->executerRequete($sql, array($offset, $limit));
-        $commentaires = $req->fetchAll();
+        $reponse = $req->fetchAll();
+        $commentaires = array();
+        foreach ($reponse as $commentaire)
+        {
+            $commentaire = new Commentaire($commentaire);
+            array_push($commentaires, $commentaire);
+        }
         return $commentaires;
     }
     // Récupération des commentaires validés
@@ -24,10 +30,16 @@ class CommentaireManager extends Modele
     {
         $offset = (int)$offset;
         $limit = (int)$limit;
-        $sql = 'SELECT id, id_billet, auteur, commentaire, DATE_FORMAT(date_commentaire, \'%d/%m/%Y\') AS dateComm, DATE_FORMAT(date_commentaire, \'%Hh%i\') AS heureComm, valide FROM commentaires WHERE valide=\'TRUE\' ORDER BY date_commentaire LIMIT :offset, :limit';
+        $sql = 'SELECT id, id_billet, auteur, commentaire, DATE_FORMAT(date_commentaire, \'%d/%m/%Y\') AS date_commentaire, valide FROM commentaires WHERE valide=\'TRUE\' ORDER BY date_commentaire LIMIT :offset, :limit';
         
         $req = $this->executerRequete($sql, array($offset, $limit));
-        $commentaires = $req->fetchAll();
+        $reponse = $req->fetchAll();
+        $commentaires = array();
+        foreach ($reponse as $commentaire)
+        {
+            $commentaire = new Commentaire($commentaire);
+            array_push($commentaires, $commentaire);
+        }
         return $commentaires;
     }
     
@@ -38,17 +50,23 @@ class CommentaireManager extends Modele
         $limit = (int)$limit;
         $id = (int)$id;
         
-        $sql = 'SELECT id, id_billet, auteur, commentaire, DATE_FORMAT(date_commentaire, \'%d/%m/%Y\') AS dateComm, DATE_FORMAT(date_commentaire, \'%Hh%i\') AS heureComm, valide FROM commentaires WHERE id_billet=:id ORDER BY date_commentaire LIMIT :offset, :limit';
-        $req = $this->executerRequete($sql, array($id, $offset, $limit));
+        $sql = 'SELECT id, id_billet, auteur, commentaire, DATE_FORMAT(date_commentaire, \'%d/%m/%Y\') AS date_commentaire, valide FROM commentaires WHERE id_billet=:id ORDER BY date_commentaire LIMIT :offset, :limit';
         
-        $commentairesById = $req->fetchAll();
+        $req = $this->executerRequete($sql, array($id, $offset, $limit));
+        $reponse = $req->fetchAll();
+        $commentairesById = array();
+        foreach($reponse as $commentaireById)
+        {
+            $commentaireById = new Commentaire($commentaireById);
+            array_push($commentairesById, $commentaireById);
+        }
         return $commentairesById;
     }
     
     // Ajout des nouveaux commentaires à la BDD, validés par défaut
     public function postCommentaire(Commentaire $commentaire)
     {
-        if (isset($_POST['id_billet']))
+        if (isset($_POST['idBillet']))
         {
             $sql = 'INSERT INTO commentaires (id_billet, auteur, commentaire, date_commentaire) VALUES(?, ?, ?, NOW())';
             $array = array($commentaire->id_billet(), $commentaire->auteur(), $commentaire->commentaire());
