@@ -3,7 +3,7 @@
 // On appelle la classe qui fait la connexion à la BDD et les classes Billet et Commentaire pour récupérer les informations
 require_once('modele/Modele.php');
 require_once('modele/Billet.php');
-require_once('modele/Commentaire.php');
+//require_once('modele/Commentaire.php');
 
 // Création de la classe BilletManager qui effectuera les requêtes en lien avec les billets
 class BilletManager extends Modele
@@ -13,10 +13,16 @@ class BilletManager extends Modele
     {   
         $offset = (int)$offset;
         $limit = (int)$limit;
-        $sql = 'SELECT id, titre, extrait, contenu, DATE_FORMAT(date_creation, \'%d/%m/%Y\') AS dateCrea, DATE_FORMAT(date_creation, \'%Hh%i\') AS heureCrea FROM billets ORDER BY id LIMIT ?, ?';
+        $sql = 'SELECT id, titre, extrait, contenu, DATE_FORMAT(dateCrea, \'%d/%m/%Y\') AS dateCrea FROM billets ORDER BY id LIMIT ?, ?';
         
         $req = $this->executerRequete($sql, array($offset, $limit));
-        $billets = $req->fetchAll();
+        $reponse = $req->fetchAll();
+        $billets = array();
+        foreach ($reponse as $billet) 
+        {
+            $billet = new Billet($billet);
+            array_push($billets, $billet);
+        }
         return $billets;
     }
     
@@ -24,7 +30,7 @@ class BilletManager extends Modele
     public function getBilletById($idBillet)
     {
         $idBillet = (int)$idBillet;
-        $sql = 'SELECT id, titre, extrait, contenu, DATE_FORMAT(date_creation, \'%d/%m/%Y\') AS dateCrea, DATE_FORMAT(date_creation, \'%Hh%i\') As heureCrea FROM billets WHERE id=:id_billet';
+        $sql = 'SELECT id, titre, extrait, contenu, DATE_FORMAT(dateCrea, \'%d/%m/%Y\') AS dateCrea FROM billets WHERE id=:id_billet';
         
         $req = $this->executerRequete($sql, array($idBillet));
         $billet = $req->fetch();
@@ -36,7 +42,7 @@ class BilletManager extends Modele
     {
         if(isset($_POST['extrait']))
         {
-            $sql = 'INSERT INTO billets (id, titre, extrait, contenu, date_creation) VALUES(?, ?, ?, ?, NOW())';
+            $sql = 'INSERT INTO billets (id, titre, extrait, contenu, dateCrea) VALUES(?, ?, ?, ?, NOW())';
             $array = array($billet->id(), $billet->titre(), $billet->extrait(), $billet->contenu());
             $this->executerRequete($sql, $array);
         }
