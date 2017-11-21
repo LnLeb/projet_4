@@ -7,7 +7,7 @@ class Billet
               $titre,
               $extrait,
               $contenu,
-              $date_creation;
+              $dateCrea;
     
     public function hydrate(array $donnees)
     {
@@ -46,13 +46,12 @@ class Billet
     {
         return $this->contenu;
     }
-    public function date_creation()
+    public function dateCrea()
     {
-        return $this->date_creation;
+        return $this->dateCrea;
     }
     
     //setters
-    
     public function setId($id)
     {
         $id = (int) $id;
@@ -84,5 +83,9 @@ class Billet
         {
             $this->contenu = $contenu;   
         }
+    }
+    public function setDateCrea($dateCrea)
+    {
+        $this->dateCrea = $dateCrea;
     }
 }
