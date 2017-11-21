@@ -26,16 +26,20 @@ class ControleurAccueil
         $derniersBillets = $this->billet->getBillets($this->countBillet, 3);
         $this->countComm = $this->commentaire->countCommentairesValide() - 3;
         $derniersCommentaires = $this->commentaire->getCommentairesValide($this->countComm, 3);
-        
-        // sécurisation de l'affichage
-        foreach($derniersCommentaires as $cle=>$commentaire)
+
+        // gestion du lien de connexion
+        if (isset($_SESSION['identifiant']))
         {
-            $derniersCommentaires[$cle]['auteur'] = htmlspecialchars($commentaire['auteur']);
-            $derniersCommentaires[$cle]['commentaire'] = nl2br(htmlspecialchars($commentaire['commentaire']));
+            $connexion = 'index.php?action=admin';
+        }
+        else 
+        {
+            $connexion = '#connexion';
         }
         
         // on génère la vue
         $vue = new Vue('accueil');
-        $vue->generer(array('allBillets' => $allBillets, 'derniersBillets' => $derniersBillets, 'derniersCommentaires' => $derniersCommentaires));
+        $vue->generer(array('allBillets' => $allBillets,                                'derniersBillets' => $derniersBillets,                      'derniersCommentaires' => $derniersCommentaires, 
+                           'connexion' => $connexion));
     }
 }
