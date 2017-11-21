@@ -2,16 +2,46 @@
 <!-- menu de navigation -->
 <nav>
     <ul>
-        <li><a href='index.php'>Accueil</a></li>
-        <li><a href='index.php?action=admin&rubrique=nouveauChapitre'>Nouveau chapitre</a></li>
-        <li><a href='index.php?action=admin#gestionComm'>Gestion des commentaires</a></li>
-        <li><a href='index.php?action=admin&rubrique=deconnexion'>Déconnexion</a></li>
+        <li><a href="index.php" title="Page de présentation">Accueil</a></li>
+        <li><a href="index.php?action=admin&rubrique=nouveauChapitre" title="Création d'un chapitre">Nouveau chapitre</a></li>
+        <li><a href="index.php?action=admin#gestionComm" title="Commentaires signalés">Gestion des commentaires</a></li>
+        <li><a href="index.php?action=admin&rubrique=deconnexion" title="déconnexion de l'administration">Déconnexion</a></li>
     </ul>
 </nav>
 
 <!-- liste des chapitres publiés -->
 <section id="admin">
     <div class=administration>
+    <article id="chapitresEnCreation">
+        <h2>Chapitre(s) en cours d'écriture : </h2> 
+        <?php 
+        if(!empty($chapitres)) {
+            ?>
+            <table>
+                <?php
+                foreach($chapitres as $chapitre)
+                {
+                ?>
+                    <tr>
+                        <h3><?= $chapitre->titre(); ?></h3>
+                        <p><?= $chapitre->extrait(); ?></p>
+                        <a href="index.php?action=admin&rubrique=apercu&id=<?= $chapitre->id(); ?>">Apperçu</a> | 
+                        <a href="index.php?action=admin&rubrique=updateChap&id=<?= $chapitre->id(); ?>">Mettre à jour</a> | 
+                        <a href="index.php?action=admin&rubrique=deleteChapitre&id=<?= $chapitre->id(); ?>">Supprimer</a> | 
+                        <a href="index.php?action=admin&rubrique=publierChap&id=<?=$chapitre->id(); ?>">Publier</a>
+                    </tr>
+                <?php        
+                }
+                ?>
+            </table>
+        <?php
+        }
+        else
+        {
+            echo 'Aucun chapitre en cours d\'écriture pour le moment';
+        }
+        ?>
+    </article>
     <article id="chapitresEnLigne">
         <h2>Chapitres en ligne : </h2>
         <table>
@@ -20,11 +50,11 @@
             {
             ?>
             <tr>
-                <h3><?= $billet['titre']; ?></h3>
-                <p><?=$billet['extrait']; ?></p>
-                <a href="index.php?action=billet&id=<?=$billet['id'] ?>&page=1">Lire</a> | 
-                <a href="index.php?action=admin&rubrique=update&id=<?= $billet['id']; ?>">Mettre à jour</a> |
-                <a href="index.php?action=admin&rubrique=deleteBillet&id=<?= $billet['id']; ?>">Supprimer</a> 
+                <h3><?= $billet->titre(); ?></h3>
+                <p><?=$billet->extrait(); ?></p>
+                <a href="index.php?action=billet&id=<?=$billet->id() ?>&page=1" title="accès au chapitre">Lire</a> | 
+                <a href="index.php?action=admin&rubrique=update&id=<?= $billet->id(); ?>" title="Page de mise à jour">Mettre à jour</a> |
+                <a href="index.php?action=admin&rubrique=deleteBillet&id=<?= $billet->id(); ?>" title="Supression définitive">Supprimer</a> 
             </tr>
             <?php
             }
@@ -35,9 +65,8 @@
         if(isset($_SESSION['info']) || $_SESSION['info'] != '')
         {
             echo $_SESSION['info']; 
+            $_SESSION['info'] = '';
         }
-        set_time_limit(3);
-        $_SESSION['info'] = '';
         ?>
         </p>
     </article>
@@ -54,10 +83,10 @@
                 ?>
                     <tr>
                         <p>
-                        <?= $commentaire['auteur']; ?>, le <?= $commentaire['dateComm']; ?> à <?= $commentaire['heureComm']; ?> : "<?= $commentaire['commentaire']; ?>".
+                        <?= $commentaire->auteur(); ?>, le <?= $commentaire->date_commentaire(); ?> : "<?= $commentaire->commentaire(); ?>".
                         </p>
-                        <a href="index.php?action=admin&rubrique=updateCom&id=<?= $commentaire['id'];?>">Valider</a> | 
-                        <a href="index.php?action=admin&rubrique=deleteCom&id=<?= $commentaire['id']; ?>">Supprimer</a>
+                        <a href="index.php?action=admin&rubrique=updateCom&id=<?= $commentaire->id();?>" title="remise en ligne">Valider</a> | 
+                        <a href="index.php?action=admin&rubrique=deleteCom&id=<?= $commentaire->id(); ?>" title="suppression définitive">Supprimer</a>
                     </tr>
                 <?php
                 }
