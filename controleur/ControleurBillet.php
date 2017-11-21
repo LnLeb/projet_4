@@ -27,22 +27,6 @@ class ControleurBillet
             $allCommentaires = $this->commentaire->getCommentairesByIdBillet(0, $this->commentaire->countCommentairesValide(), $_GET['id']);
             // on limite les commentaires à 5 par page pour la pagination
             $commentaires = $this->commentaire->getCommentairesByIdBillet(5 * ($_GET['page'] - 1), 5, $_GET['id']);
-            
-            // s'il existe des commentaires
-            if(!empty($commentaires))
-            {
-                // on sécurise l'affichage
-                foreach($commentaires as $cle=>$commentaire)
-                {
-                    $commentaires[$cle]['auteur'] = htmlspecialchars($commentaire['auteur']);
-                    $commentaires[$cle]['commentaire'] = nl2br(htmlspecialchars($commentaire['commentaire']));
-                }
-                foreach($allCommentaires as $cle=>$commentaire)
-                {
-                    $allCommentaires[$cle]['auteur'] = htmlspecialchars($commentaire['auteur']);
-                    $allCommentaires[$cle]['commentaire'] = nl2br(htmlspecialchars($commentaire['commentaire']));
-                }
-            }
         }
         
         // pour la gestion des fonds d'écran
@@ -72,7 +56,6 @@ class ControleurBillet
             }
             $i= $i+5;
         }
-        
         
         // gestion du lien de connexion
         $this->titre = $billet['titre']; 
@@ -112,7 +95,7 @@ class ControleurBillet
         $commentaire = new Commentaire($donnees);
         $commentaire->setAuteur($auteur);
         $commentaire->setCommentaire($comm);
-        $commentaire->setIdBillet($idBillet);
+        $commentaire->setId_billet($idBillet);
         
         $this->commentaire->postCommentaire($commentaire);
         $_SESSION['info'] = 'Votre commentaire a bien été publié ! ';
