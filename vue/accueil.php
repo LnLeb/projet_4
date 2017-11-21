@@ -1,19 +1,13 @@
 <?php 
 $this->titre = 'Billet simple pour l\'Alaska'; 
-
-if (isset($_SESSION['identifiant'])){
-    $connexion = '?action=admin';
-}
-else {
-    $connexion = '#connexion';
-}
 ?>
+
 <article id="navigation">
     <nav>
         <ul>
-            <li><a href="index.php">Accueil</a></li>
-            <li><a href="#chapitres">Les chapitres</a></li>
-            <li><a href="index.php<?= $connexion ?>">Connexion</a></li>
+            <li><a href="index.php" title="Page de présentation">Accueil</a></li>
+            <li><a href="#chapitres" title="Liste des chapitres en ligne">Les chapitres</a></li>
+            <li><a href="<?= $connexion ?>" title="Accès à l'administration">Connexion</a></li>
         </ul>
     </nav>
     <!-- Affichage des chapitres dans la navigation -->
@@ -21,7 +15,7 @@ else {
     <?php foreach($allBillets as $billet)
     {
     ?>
-        <li><a href="index.php?action=billet&id=<?= $billet['id']; ?>&page=1"><?= $billet['titre']; ?></a></li>
+        <li><a href="index.php?action=billet&id=<?= $billet->id(); ?>&page=1" title="Lire le chapitre"><?= $billet->titre(); ?></a></li>
         <?php }?>
     </ul>
     <!-- Affichage de la connexion dans la navigation -->
@@ -36,9 +30,8 @@ else {
         if(isset($_SESSION['info']) || $_SESSION['info'] != '')
         {
             echo $_SESSION['info']; 
-        }
-            set_time_limit(3);
             $_SESSION['info'] = '';
+        }
         ?>
         </p>
     </form>
@@ -60,12 +53,12 @@ else {
             {
             ?>
                 <div>
-                    <h3><?= $billet['titre']; ?></h3>
+                    <h3><?= $billet->titre(); ?></h3>
                     <p>
-                        <em>Posté le <?= $billet['dateCrea']; ?> à <?= $billet['heureCrea']; ?></em>
+                        <em>Posté le <?= $billet->dateCrea(); ?></em>
                     </p>
-                    <p><?= $billet['extrait']; ?>..</p>
-                    <em><a href="index.php?action=billet&id=<?= $billet['id']; ?>&page=1">Lire le chapitre</a></em>
+                    <p><?= $billet->extrait(); ?>..</p>
+                    <em><a href="index.php?action=billet&id=<?= $billet->id(); ?>&page=1" title="Accès au chapitre entier">Lire le chapitre</a></em>
                 </div>
             <?php
             }
@@ -88,11 +81,11 @@ else {
                 foreach($derniersCommentaires as $commentaire)
                 {
                     ?>
-                        <h3><?= $commentaire['auteur']; ?></h3>
+                        <h3><?= $commentaire->auteur(); ?></h3>
                         <p>
-                            <em>Posté le <?= $commentaire['dateComm']; ?> à <?= $commentaire['heureComm']; ?></em>
+                            <em>Posté le <?= $commentaire->date_commentaire(); ?></em>
                         </p>
-                        <p>" <?= $commentaire['commentaire']; ?> "</p>
+                        <p>" <?= $commentaire->commentaire(); ?> "</p>
                     <?php
                 }
                 ?>
