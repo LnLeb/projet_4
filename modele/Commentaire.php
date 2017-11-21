@@ -7,7 +7,8 @@ class Commentaire
               $id_billet,
               $auteur,
               $commentaire,
-              $date_commentaire;
+              $date_commentaire,
+              $valide;
     
     public function hydrate(array $donnees)
     {
@@ -53,6 +54,11 @@ class Commentaire
         return $this->date_commentaire;
     }
     
+    public function valide()
+    {
+        return $this->valide;
+    }
+    
     //setters
     
     public function setId($id)
@@ -64,7 +70,7 @@ class Commentaire
         }
     }
     
-    public function setIdBillet($id_billet)
+    public function setId_billet($id_billet)
     {
         $id_billet = (int) $id_billet;
         if ($id_billet > 0)
@@ -86,6 +92,19 @@ class Commentaire
         if (is_string($commentaire))
         {
             $this->commentaire = $commentaire;
+        }
+    }
+    
+    public function setDate_commentaire($date_commentaire)
+    {
+        $this->date_commentaire = $date_commentaire;
+    }
+    
+    public function setValide($valide)
+    {
+        if ($valide == 'TRUE' || $valide == 'FALSE')
+        {
+            $this->valide = $valide;
         }
     }
 }
