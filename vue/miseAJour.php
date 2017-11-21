@@ -3,14 +3,14 @@
 <!-- navigation dans l'administration -->
 <nav>
     <ul>
-        <li><a href='index.php?action=admin'>Chapitres en ligne</a></li>
-        <li><a href='index.php?action=admin&rubrique=nouveauChapitre'>Nouveau chapitre</a></li>
-        <li><a href='index.php?action=admin#gestionComm'>Gestion des commentaires</a></li>
-        <li><a href='index.php?action=admin&rubrique=deconnexion'>Déconnexion</a></li>
+        <li><a href="index.php?action=admin" title="Accueil de l'administration">Chapitres en ligne</a></li>
+        <li><a href="index.php?action=admin&rubrique=nouveauChapitre" title="Création d'un chapitre">Nouveau chapitre</a></li>
+        <li><a href="index.php?action=admin#gestionComm" title="Commentaires signalés">Gestion des commentaires</a></li>
+        <li><a href="index.php?action=admin&rubrique=deconnexion" title="Déconnexion de l'administration">Déconnexion</a></li>
     </ul>
 </nav>
 
-<section id="adminUpdate">
+<section class="adminUpdate">
     <div class="administration">
         <!-- Zone de mise à jour du billet sélectionné, avec TyniMce -->
         <article class="articleChapitre">
