@@ -12,7 +12,7 @@ else
 <!-- Menu de navigation -->
 <nav>
     <ul class="navigation">
-        <li><a href="index.php">Accueil</a></li>
+        <li><a href="index.php" title="Page de présentation">Accueil</a></li>
         <?php if($_GET['id'] > 1)
         {?>
         <li><a href="index.php?action=billet&id=<?= $_GET['id']-1; ?>&page=1">Chapitre précédent</a></li>
@@ -27,15 +27,15 @@ else
 </nav>
 
 <section id="<?= $section ?>">
-    <div id="sectionCom">
+    <div class="sectionCom">
     <h2><?= $billet['titre']; ?></h2>
     <p><?= $billet['contenu']; ?></p>
     <p>
-        <em>Publié le <?= $billet['dateCrea']; ?> à <?= $billet['heureCrea']; ?></em>
+        <em>Publié le <?= $billet['dateCrea']; ?></em>
     </p>
     
     <?php if(isset($_SESSION['identifiant'])) {
-        echo '<a href="index.php?action=admin&rubrique=update&id='. $billet['id'].'">Mettre à jour le billet</a> | <a href="index.php?action=admin&rubrique=deleteBillet&id='. $billet['id'].'">Supprimer</a>';
+        echo '<a href="index.php?action=admin&rubrique=update&id='. $billet['id'].'" title="Administration: mise à jour">Mettre à jour le chapitre</a> | <a href="index.php?action=admin&rubrique=deleteBillet&id='. $billet['id'].'" title="Administration: supprimer le chapitre">Supprimer</a>';
     } ?>
 
     <!-- Affichage des commentaires qui correspondent au bon billet -->
@@ -45,15 +45,15 @@ else
     {
         foreach($commentaires as $commentaire)
         {
-            if ($commentaire['id_billet'] == $_GET['id'] && $commentaire['valide'] == 'TRUE')
+            if ($commentaire->id_billet() == $_GET['id'] && $commentaire->valide() == 'TRUE')
             {
             ?>
-                <h3><?= $commentaire['auteur']; ?></h3>
+                <h3><?= $commentaire->auteur(); ?></h3>
                 <p>
-                    <em>Posté le <?= $commentaire['dateComm']; ?> à <?= $commentaire['heureComm']; ?></em>
+                    <em>Posté le <?= $commentaire->date_commentaire(); ?></em>
                 </p>
-                <p>" <?= $commentaire['commentaire']; ?> "</p>
-                <form method="post" action="index.php?action=signalerCom&idCom=<?= $commentaire['id']; ?>&idBillet=<?= $commentaire['id_billet']; ?>">
+                <p>" <?= $commentaire->commentaire(); ?> "</p>
+                <form method="post" action="index.php?action=signalerCom&idCom=<?= $commentaire->id(); ?>&idBillet=<?= $commentaire->id_billet(); ?>">
                     <label for="signaler"><em>Ce commentaire vous paraît déplacé ?</em></label>
                 <input type="submit" name="signaler" value="Signaler" id="bouton">
                 </form>
@@ -72,7 +72,7 @@ else
         for($i=1; $i<$nbPages+1; $i++)
         {
         ?>
-            <a href="index.php?action=billet&id=<?= $_GET['id']; ?>&page=<?= $i; ?>#postComm"><?= $i; ?></a> | 
+            <a href="index.php?action=billet&id=<?= $_GET['id']; ?>&page=<?= $i; ?>#postComm" title="Autre page de commentaires"><?= $i; ?></a> | 
         <?php
         }
     }
@@ -93,9 +93,8 @@ else
             if(isset($_SESSION['info']) || $_SESSION['info'] != '')
             {
                 echo $_SESSION['info']; 
+                $_SESSION['info'] = '';
             }
-            set_time_limit(3);
-            $_SESSION['info'] = '';
             ?>
         </p>
     </form>
