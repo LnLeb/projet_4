@@ -21,8 +21,8 @@ class ControleurBillet
         // s'il existe un billet correspondant à l'id passé par l'url on récupère uniquement le bon billet pour l'afficher avec les commentaires
         if (isset($_GET['id']))
         {
-            $allBillets = $this->billet->getBillets(0, $this->billet->countBillets());
-            $billet = $this->billet->getBilletById($_GET['id']);
+            $allBillets = $this->billet->getBilletsPublics(0, $this->billet->countBillets());
+            $billet = $this->billet->getBilletPublicById($_GET['id']);
             // on demande les commentaires qui correspondent au bon billet
             $allCommentaires = $this->commentaire->getCommentairesByIdBillet(0, $this->commentaire->countCommentairesValide(), $_GET['id']);
             // on limite les commentaires à 5 par page pour la pagination
