@@ -25,7 +25,9 @@
         {
             if ($this->bdd == null)
             {
-                $this->bdd = new PDO('mysql:host=localhost;dbname=projet4; charset=utf8', 'root', '', array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION, PDO::ATTR_EMULATE_PREPARES => FALSE));
+                //$this->bdd = new PDO('mysql:host=db676455993.db.1and1.com;dbname=db676455993;charset=utf8', 'dbo676455993', 'Olicien0605(L)', array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION, PDO::ATTR_EMULATE_PREPARES => FALSE));
+                // pour la connexion en local
+                $this->bdd = new PDO('mysql:host=localhost;dbname=projet4;charset=utf8', 'root', '', array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION, PDO::ATTR_EMULATE_PREPARES => FALSE));
             }
             return $this->bdd;
         }
