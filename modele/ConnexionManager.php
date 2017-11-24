@@ -1,6 +1,5 @@
 <?php
 require_once('modele/Modele.php');
-require_once('modele/Connexion.php');
 
 class ConnexionManager extends Modele
 {
