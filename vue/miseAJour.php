@@ -4,7 +4,7 @@
 <nav>
     <ul>
         <li><a href="index.php?action=admin" title="Accueil de l'administration">Chapitres en ligne</a></li>
-        <li><a href="index.php?action=admin&rubrique=nouveauChapitre" title="Création d'un chapitre">Nouveau chapitre</a></li>
+        <li><a href="index.php?action=admin&rubrique=nouveauBillet" title="Création d'un chapitre">Nouveau chapitre</a></li>
         <li><a href="index.php?action=admin#gestionComm" title="Commentaires signalés">Gestion des commentaires</a></li>
         <li><a href="index.php?action=admin&rubrique=deconnexion" title="Déconnexion de l'administration">Déconnexion</a></li>
     </ul>
