@@ -19,6 +19,7 @@
                 <textarea name="extrait" id="extrait" rows="8" ></textarea><br>
                 <label for="contenu">Contenu : </label><br>
                 <textarea name="contenu" id="contenu" rows="40"></textarea><br>
+                <input type="hidden" name="id" value="<?= $nouvelId; ?>">
                 <input type="submit" value="enregistrer" class="bouton">
             </form>
         </article>
