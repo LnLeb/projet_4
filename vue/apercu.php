@@ -9,12 +9,12 @@
 </nav>
 <section id="apercu">
     <div class="sectionCom">
-        <h2><?= $chapitre['titre']; ?></h2>
-        <p><?= $chapitre['contenu']; ?></p>
+        <h2><?= $billet['titre']; ?></h2>
+        <p><?= $billet['contenu']; ?></p>
 
         <a href="index.php?action=admin">retour</a> | 
-        <a href="index.php?action=admin&rubrique=updateChap&id=<?= $chapitre['id']; ?>">modifier</a> | 
-        <a href="index.php?action=admin&rubrique=deleteChapitre&id=<?=$chapitre['id']; ?>">supprimer</a> | 
-        <a>publier</a>
+        <a href="index.php?action=admin&rubrique=update&id=<?= $billet['id']; ?>">modifier</a> | 
+        <a href="index.php?action=admin&rubrique=deleteBillet&id=<?=$billet['id']; ?>">supprimer</a> | 
+        <a href="index.php?action=admin&rubrique=publier&id=<?=$billet['id']; ?>">publier</a>
     </div>
 </section>
