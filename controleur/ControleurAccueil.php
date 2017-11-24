@@ -21,9 +21,9 @@ class ControleurAccueil
     public function accueil()
     {  
         // paramètres d'affichage des billets et des commentaires sur la page d'accueil
-        $allBillets = $this->billet->getBillets(0, $this->billet->countBillets());
+        $allBillets = $this->billet->getBilletsPublics(0, $this->billet->countBillets());
         $this->countBillet = $this->billet->countBillets() - 3;
-        $derniersBillets = $this->billet->getBillets($this->countBillet, 3);
+        $derniersBillets = $this->billet->getBilletsPublics($this->countBillet, 3);
         $this->countComm = $this->commentaire->countCommentairesValide() - 3;
         $derniersCommentaires = $this->commentaire->getCommentairesValide($this->countComm, 3);
 
@@ -39,7 +39,9 @@ class ControleurAccueil
         
         // on génère la vue
         $vue = new Vue('accueil');
-        $vue->generer(array('allBillets' => $allBillets,                                'derniersBillets' => $derniersBillets,                      'derniersCommentaires' => $derniersCommentaires, 
-                           'connexion' => $connexion));
+        $vue->generer(array('allBillets' => $allBillets,
+                            'derniersBillets' => $derniersBillets,
+                            'derniersCommentaires' => $derniersCommentaires, 
+                            'connexion' => $connexion));
     }
 }
